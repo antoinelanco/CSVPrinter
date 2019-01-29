@@ -1,0 +1,58 @@
+#!/bin/python3
+
+import csv
+import sys
+
+def f(s,tabsize):
+	inter = ''
+	taille=len(tabsize)-1
+	for i in range(taille):
+		inter+='─'*tabsize[i]
+		inter+=s
+	inter+='─'*tabsize[taille]
+	return inter
+
+
+csvfile = open(sys.argv[1], 'r')
+s = csv.reader(csvfile, delimiter=',')
+
+sizetab = 0
+tab = []
+
+for r in s:
+	sizetab = max(sizetab,len(r))
+	tab.append(r)
+
+tabsize = [0]*sizetab
+for a in tab:
+	for i in range(len(a)):
+		tabsize[i] = max(tabsize[i],len(a[i]))
+
+size = sum(tabsize)+len(tabsize)-1
+
+inter = f('┼',tabsize)
+up = f('┬',tabsize)
+down = f('┴',tabsize)
+
+
+# print(tabsize)
+print('┌' + up + '┐')
+
+
+
+t = len(tab)-1
+for r in range(t):
+
+	print('│',end = '')
+	for i in range(len(tab[r])):
+		print( tab[r][i].ljust(tabsize[i]) + '│',end='' )
+	print('')
+	print('├' + inter + '┤')
+
+print('│',end = '')
+for i in range(len(tab[t])):
+	print( tab[t][i].ljust(tabsize[i]) + '│',end='' )
+print('')
+
+
+print( '└' + down + '┘')
